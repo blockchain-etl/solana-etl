@@ -11,7 +11,7 @@ long_description = read("README.md") if os.path.isfile("README.md") else ""
 
 setup(
     name="solana-etl",
-    version="0.0.1",
+    version="0.0.2",
     author="Gamejam.com",
     author_email="info@gamejam.com",
     description="Tools for exporting Solana blockchain data to CSV or JSON",
@@ -24,7 +24,6 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
