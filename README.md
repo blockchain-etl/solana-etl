@@ -1,1 +1,1 @@
-# solana-config
+# Solana ETL (was solana-config)
