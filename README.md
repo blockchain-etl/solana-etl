@@ -6,7 +6,14 @@ This repository contains all of the code for running a Solana ETL pipeline. The 
 
 For more information, please check the [documentation](/docs/).
 
-# Setup
+## Architecture Overview
+The overall infrastructure is depicted below.
+
+![architecture](/docs/img/architecture.png)
+
+For more information check the [documentation](/docs/).
+
+## Setup
 Use the script in `scripts/setup.sh` to automatically install system dependencies, clone the repo and all submodules, and compile:
 -  Tested on Ubuntu LTS 22.04
 ```
