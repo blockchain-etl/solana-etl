@@ -1,0 +1,112 @@
+[package]
+name = "blockchain_etl_indexer"
+version = "1.0.0"
+edition = "2021"
+build = "build_proto.rs"
+
+[dependencies]
+futures = "0.3.29"
+chrono = "0.4.31"
+actix-web = "4.3.0"
+prometheus = "0.13.3"
+actix-web-prom = "0.7.0"
+prost = "0.12.1"
+prost-build = { version = "0.12.1" }
+zstd = "0.12.3"
+tokio = { version = "1.34.0", features = ["full", "signal"] }
+reqwest = { version = "0.11.22", features = ["json"] }
+serde = { version = "1.0.164", features = ["derive"] }
+serde_json = "1.0.99"
+simd-json = { version = "0.11.0", features = ["allow-non-simd"] }
+async-channel = "2.1.0"
+rand = "0.8.5"
+thiserror = "1.0.50"
+csv = "1.3.0"
+clap = { version = "4.4.8", features = ["derive"] }
+log = "0.4.20"
+env_logger = "0.10.1"
+ctrlc = "3.4.1"
+dotenvy = "0.15.7"
+base64 = "0.21.5"
+borsh = "0.10.3"
+
+# PUBLISHERS
+#   RabbitMQ Classic
+amqprs = { version = "1.4.0", optional = true }
+
+#   RabbitMQ Stream
+rabbitmq-stream-client = { version = "0.4.0", optional = true }
+
+#   Google Pub/Sub
+google-cloud-pubsub = { version = "0.20.0", optional = true }
+google-cloud-googleapis = { version = "0.11.0", optional = true }
+google-cloud-auth = { version = "0.12.0", optional = true }
+
+#   JSONL
+prost-reflect = { version = "0.12.0", optional = true, features = ["serde"] }
+
+#   JSON
+
+
+# BLOCKCHAIN-SPECIFIC
+#   SOLANA DEPENDENCIES
+solana-sdk = { version = "1.16", optional = true }
+solana-program = { version = "1.16", optional = true }
+solana-transaction-status = { version = "1.16", optional = true }
+solana-account-decoder = { version = "1", optional = true }
+solana-storage-bigtable = { version = "1", optional = true }
+mpl-token-metadata = "3.0.1"
+
+# NON-WINDOWS
+[target.'cfg(not(target_env = "msvc"))'.dependencies]
+tikv-jemallocator = "0.5.4"
+
+[build-dependencies]
+prost-build = { version = "0.12.1" }
+
+[profile.release]
+lto = true
+
+[features]
+default = ["SOLANA", "SEPARATE_PUBLISHERS"]
+# Solana features
+SOLANA_BIGTABLE = ["SOLANA", "dep:solana-storage-bigtable"]
+SOLANA = [
+    "RPC",
+    "CUSTOM_INDEXING",
+    "dep:solana-sdk",
+    "dep:solana-program",
+    "dep:solana-transaction-status",
+    "dep:solana-account-decoder",
+    "dep:solana-storage-bigtable",
+]
+
+# Single vs Separate publishers
+SINGLE_PUBLISHER = ["STREAM"]
+SEPARATE_PUBLISHERS = ["STREAM"]
+
+# Publisher selection
+GOOGLE_PUBSUB = [
+    "STREAM",
+    "STRING_TIMESTAMP",
+    "dep:google-cloud-pubsub",
+    "dep:google-cloud-googleapis",
+    "dep:google-cloud-auth",
+]
+RABBITMQ_STREAM = ["STREAM", "INT_TIMESTAMP", "dep:rabbitmq-stream-client"]
+RABBITMQ_CLASSIC = ["STREAM", "INT_TIMESTAMP", "dep:amqprs"]
+JSONL = ["dep:prost-reflect", "STRING_TIMESTAMP", "PUBLISH_WITH_NAME"]
+JSON = ["dep:prost-reflect", "STRING_TIMESTAMP", "PUBLISH_WITH_NAME"]
+STREAM = []
+PUBLISH_WITH_NAME = []
+
+# Use an ISO string, or the number of milliseconds since the UNIX epoch for timestamps
+STRING_TIMESTAMP = []
+INT_TIMESTAMP = []
+
+# Call features
+RPC = []
+REST = []
+
+# Whether we have a more custom indexing functionality
+CUSTOM_INDEXING = []

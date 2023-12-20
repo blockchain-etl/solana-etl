@@ -1,0 +1,189 @@
+syntax = "proto2";
+package records_string_timestamp;
+
+message BlockRecord {
+    optional int64 slot = 1;
+    optional string block_hash = 2;
+    optional string block_timestamp = 3;
+    optional int64 height = 4;
+    optional string previous_block_hash = 5;
+    optional int64 transaction_count = 6;
+    optional int64 leader_reward = 7;
+    optional string leader = 8;
+}
+
+message BlockRewardRecord {
+    optional int64 block_slot = 1;
+    optional string block_hash = 2;
+    optional string block_timestamp = 3;
+    optional uint64 commission = 4;
+    optional int64 lamports = 5;
+    optional uint64 post_balance = 6;         
+    optional string pubkey = 7;
+    optional string reward_type = 8;
+}
+
+message TransactionRecord {
+    optional int64 block_slot = 1;
+    optional string block_hash = 2;
+    optional string block_timestamp = 3;
+    optional string recent_block_hash = 4;
+    optional string signature = 5;
+    optional int64 index = 6;
+    optional uint64 fee = 7;
+    optional string status = 8;
+    optional string err = 9;
+    optional uint64 compute_units_consumed = 10;
+    repeated TransactionAccountRecord accounts = 11;
+    repeated string log_messages = 12;
+    repeated BalanceChangeRecord balance_changes = 13;
+    repeated TokenBalanceRecord pre_token_balances = 14;
+    repeated TokenBalanceRecord post_token_balances = 15;
+}
+
+message TransactionAccountRecord {
+    optional string pubkey = 1;
+    optional bool signer = 2;
+    optional bool writable = 3;
+}
+
+message BalanceChangeRecord {
+    optional string account = 1;
+    optional uint64 before = 2;
+    optional uint64 after = 3;
+}
+
+message TokenBalanceRecord {
+    optional int64 account_index = 1;
+    optional string mint = 2;
+    optional string owner = 3;
+    optional string amount = 4;
+    optional int64 decimals = 5;
+}
+
+message InstructionRecord {
+    optional int64 block_slot = 1;
+    optional string block_hash = 2;
+    optional string block_timestamp = 3;
+    optional string tx_signature = 4;
+    optional int64 index = 5;
+    optional int64 parent_index = 6;
+    repeated string accounts = 7;
+    optional string data = 8;
+    optional string parsed = 9;
+    optional string program = 10;
+    optional string program_id = 11;
+    optional string instruction_type = 12;
+    repeated ParamsRecord params = 13;
+}
+
+message ParamsRecord {
+    optional string key = 1;
+    optional string value = 2;
+}
+
+message AccountRecord {
+    optional int64 block_slot = 1;
+    optional string block_hash = 2;
+    optional string block_timestamp = 3;
+    optional string tx_signature = 4;
+    optional string retrieval_timestamp = 5;
+    optional string pubkey = 6;
+    optional bool executable = 7;
+    optional uint64 lamports = 8;
+    optional string owner = 9;
+    optional int64 rent_epoch = 10;
+    optional string program = 11;
+    optional int64 space = 12;
+    optional string account_type = 13;
+    optional bool is_native = 14;
+    optional string mint = 15;
+    optional string state = 16;
+    optional uint64 token_amount = 17;
+    optional int64 token_amount_decimals = 18;
+    optional string program_data = 19;
+    repeated AuthorizedVoterRecord authorized_voters = 20;
+    optional string authorized_withdrawer = 21;
+    repeated PriorVoterRecord prior_voters = 22;
+    optional string node_pubkey = 23;
+    optional int64 commission = 24;     
+    repeated EpochCreditRecord epoch_credits = 25;
+    repeated VoteRecord votes = 26;
+    optional int64 root_slot = 27;
+    repeated TimestampRecord last_timestamp = 28;
+    repeated DataRecord data = 29;
+}
+
+message AuthorizedVoterRecord {
+    optional string authorized_voter = 1;
+    optional int64 epoch = 2;
+}
+
+message PriorVoterRecord {
+    optional string authorized_pubkey = 1;
+    optional int64 epoch_of_last_authorized_switch = 2;
+    optional int64 target_epoch = 3;
+}
+
+message EpochCreditRecord {
+    optional string credits = 1;
+    optional int64 epoch = 2;
+    optional string previous_credits = 3; 
+}
+
+message VoteRecord {
+    optional int64 confirmation_count = 1;
+    optional int64 slot = 2;
+}
+
+message TimestampRecord {
+    optional string timestamp = 1;
+    optional int64 slot = 2;
+}
+
+message DataRecord {
+    optional string raw = 1;
+    optional string encoding = 2;
+}
+
+message TokenRecord {
+    optional int64 block_slot = 1;
+    optional string block_hash = 2;
+    optional string block_timestamp = 3;
+    optional string tx_signature = 4;
+    optional string retrieval_timestamp = 5;
+    optional bool is_nft = 6;
+    optional string mint = 7;
+    optional string update_authority = 8;
+    optional string name = 9;
+    optional string symbol = 10;
+    optional string uri = 11;
+    optional uint32 seller_fee_basis_points = 12;
+    repeated CreatorRecord creators = 13;
+    optional bool primary_sale_happened = 14;
+    optional bool is_mutable = 15;
+}
+
+message CreatorRecord {
+    optional string address = 1;
+    optional bool verified = 2;
+    optional int64 share = 3;
+}
+
+message TokenTransferRecord {
+    optional int64 block_slot = 1;
+    optional string block_hash = 2;
+    optional string block_timestamp = 3;
+    optional string tx_signature = 4;
+    optional string source = 5;
+    optional string destination = 6;
+    optional string authority = 7;       
+    optional uint64 value = 8;
+    optional uint64 fee = 9;
+    optional uint64 fee_decimals = 10;
+    optional string memo = 11;            
+    optional uint64 decimals = 12;
+    optional string mint = 13;
+    optional string mint_authority = 14;
+    optional string transfer_type = 15;
+}

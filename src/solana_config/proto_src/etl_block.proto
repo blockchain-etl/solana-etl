@@ -1,0 +1,22 @@
+syntax = "proto3";
+package solana.ETLBlock;
+
+import "confirmed_block.proto";
+import "account_info.proto";
+
+// these fields are optional so that we can either send a block, or accounts data, or transactions data - and use a single protobuf and pub/sub topic.
+// accounts data + block data is very large, so splitting them up ensures we don't exceed google pub/sub's 10mb message limit.
+message EtlBlock {
+    uint64 slot = 1;
+    optional solana.ConfirmedBlock.ConfirmedBlock block = 2;
+    repeated solana.ConfirmedBlock.Reward block_rewards = 3;
+    repeated solana.ConfirmedBlock.ConfirmedTransaction transactions = 4;
+    repeated solana.AccountInfo.AccountInfo accounts = 5;
+    optional TableContext table_context = 6;
+}
+
+message TableContext {
+    optional ConfirmedBlock.UnixTimestamp block_timestamp = 1;
+    string block_hash = 2;
+    string previous_block_hash = 3;
+}

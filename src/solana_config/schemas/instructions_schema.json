@@ -1,0 +1,93 @@
+[
+    {
+        "name": "block_slot",
+        "type": "INTEGER",
+        "mode": "REQUIRED",
+        "description": "The block's slot"
+    },
+    {
+        "name": "block_timestamp",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE",
+        "description": "The block's timestamp"
+    },
+    {
+        "name": "block_hash",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The block's hash"
+    },
+    {
+        "name": "tx_signature",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "The signature of the transaction that this instruction came from"
+    },
+    {
+        "name": "index",
+        "type": "INTEGER",
+        "mode": "NULLABLE",
+        "description": "The position of this instruction within all of instructions"
+    },
+    {
+        "name": "parent_index",
+        "type": "INTEGER",
+        "mode": "NULLABLE",
+        "description": "The position of the parent instruction with all of the parent instructions. Only present for the inner instructions"
+    },
+    {
+        "name": "accounts",
+        "type": "STRING",
+        "mode": "REPEATED",
+        "description": "The accounts involved in the transaction that this instruction came from"
+    },
+    {
+        "name": "data",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The instruction's raw data. Only present if the data source did not have a parser for the program"
+    },
+    {
+        "name": "parsed",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The instruction's parsed data. Only present if the data source had a parser for the program."
+    },
+    {
+        "name": "program",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The associated program that executes the instruction"
+    },
+    {
+        "name": "program_id",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The account of the program that executes the instruction"
+    },
+    {
+        "name": "instruction_type",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The type of the instruction"
+    },
+    {
+        "name": "params",
+        "type": "RECORD",
+        "mode": "REPEATED",
+        "fields": [
+            {
+                "name": "key",
+                "type": "STRING",
+                "mode": "NULLABLE",
+                "description": "The identifier of the instruction parameter"
+            },
+            {
+                "name": "value",
+                "type": "STRING",
+                "mode": "NULLABLE",
+                "description": "The instruction parameter value"
+            }
+        ]
+    }
+]
