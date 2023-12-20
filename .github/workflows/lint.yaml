@@ -1,0 +1,24 @@
+on: [pull_request]
+
+name: Lints
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          components: rustfmt, clippy
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all --manifest-path ./Cargo.toml -- --check
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --features GOOGLE_PUBSUB --manifest-path ./Cargo.toml -- -D warnings
