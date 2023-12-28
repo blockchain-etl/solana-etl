@@ -9,18 +9,6 @@ pub use super::single_stream_publisher::StreamPublisher;
 #[cfg(all(feature = "SEPARATE_PUBLISHERS", feature = "SOLANA"))]
 pub use crate::solana_config::streampublisher::StreamPublisher;
 
-// Get the appropriate connect
-#[cfg(feature = "GOOGLE_PUBSUB")]
-pub use super::google_pubsub::connect;
-#[cfg(feature = "JSON")]
-pub use super::json::connect;
-#[cfg(feature = "JSONL")]
-pub use super::jsonl::connect;
-#[cfg(feature = "RABBITMQ_CLASSIC")]
-pub use super::rabbitmq_classic::connect;
-#[cfg(feature = "RABBITMQ_STREAM")]
-pub use super::rabbitmq_stream::connect;
-
 /// An enum that represents a connection to an output.  Will only contain one item
 /// dependent on the enabled features.
 #[derive(Clone)]
@@ -31,10 +19,6 @@ pub enum StreamPublisherConnectionClient {
     RabbitMQClassic(amqprs::connection::Connection),
     #[cfg(feature = "RABBITMQ_STREAM")]
     RabbitMQStream(rabbitmq_stream_client::Producer<rabbitmq_stream_client::NoDedup>),
-    #[cfg(feature = "JSONL")]
-    JsonL(std::path::PathBuf),
-    #[cfg(feature = "JSON")]
-    Json(std::path::PathBuf),
 }
 
 /// A struct that contains the client used to connect to the publisher and the queue_name

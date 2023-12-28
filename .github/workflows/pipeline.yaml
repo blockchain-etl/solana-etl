@@ -1,0 +1,37 @@
+name: main-build
+on:
+  release:
+    types: [created]
+
+jobs:
+  determine-job:
+    runs-on: ubuntu-latest
+    outputs:
+      run-extractor-job: ${{ steps.check-ref.outputs.run_extractor }}
+      run-inserter-job: ${{ steps.check-ref.outputs.run_inserter }}
+    steps:
+    - name: Check tag pattern
+      id: check-ref
+      run: |
+        if [[ "${GITHUB_REF##*/}" == extractor* ]]; then
+          echo "::set-output name=run_extractor::true"
+        else
+          echo "::set-output name=run_extractor::false"
+        fi
+        if [[ "${GITHUB_REF##*/}" == inserter* ]]; then
+          echo "::set-output name=run_inserter::true"
+        else
+          echo "::set-output name=run_inserter::false"
+        fi
+
+  trigger-extractor-build:
+    needs: determine-job
+    if: needs.determine-job.outputs.run-extractor-job == 'true'
+    uses: ./.github/workflows/extractor-build.yaml
+            
+
+  trigger-inserter-build:
+    needs: determine-job
+    if: needs.determine-job.outputs.run-inserter-job == 'true'
+    uses: ./.github/workflows/inserter-build.yaml
+            

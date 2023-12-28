@@ -1,5 +1,6 @@
 //! This library provides all the functionality required to index
 //! the Solana network.
+use prost::Message as prost_message;
 use std::{
     error::Error,
     fs::{remove_file, File},
@@ -311,37 +312,17 @@ async fn process_block_queue_stream(
 
         #[cfg(feature = "SEPARATE_PUBLISHERS")]
         {
-            /// Publishes the records
-            #[allow(unused_variables)]
-            async fn publish_records<T>(
+            async fn publish_records<RecordType: prost_message>(
                 publisher: &blockchain_generic::output::publish::StreamPublisherConnection,
-                records: Vec<T>,
-                name: Option<&str>,
-            ) where
-                T: prost::Message,
-                T: serde::Serialize,
-            {
-                #[cfg(feature = "PUBLISH_WITH_NAME")]
-                if let Some(output_name) = name {
-                    #[cfg(feature = "JSON")]
-                    for (i, record) in records.into_iter().enumerate() {
-                        publisher
-                            .publish(&format!("{}_{}", output_name, i), record)
-                            .await;
-                    }
-                    #[cfg(feature = "JSONL")]
-                    publisher.publish_batch(output_name, records).await;
-                }
-
-                #[cfg(not(feature = "PUBLISH_WITH_NAME"))]
-                {
-                    #[cfg(feature = "GOOGLE_PUBSUB")]
-                    publisher.publish_batch(records).await;
-
-                    #[cfg(not(feature = "GOOGLE_PUBSUB"))]
-                    for record in records {
-                        publisher.publish(record).await;
-                    }
+                records: Vec<RecordType>,
+            ) {
+                let serialized_records: Vec<Vec<u8>> =
+                    records.into_iter().map(|rec| rec.encode_to_vec()).collect();
+                #[cfg(feature = "GOOGLE_PUBSUB")]
+                publisher.publish_batch(serialized_records).await;
+                #[cfg(not(feature = "GOOGLE_PUBSUB"))]
+                for serialized_record in serialized_records.into_iter() {
+                    publisher.publish(serialized_record).await;
                 }
             }
 
@@ -350,87 +331,46 @@ async fn process_block_queue_stream(
 
             // Block record
             let block_record = transformation::block::transform_to_block_record(&packed_block);
+            let serialized_block_record = block_record.encode_to_vec();
+            blocks_publisher.publish(serialized_block_record).await;
 
             // Block Rewards records
-            let block_reward_records =
-                transformation::block::transform_to_block_reward_records(&packed_block);
+            let serialized_block_reward_records: Vec<Vec<u8>> =
+                transformation::block::transform_to_block_reward_records(&packed_block)
+                    .into_iter()
+                    .map(|rec| rec.encode_to_vec())
+                    .collect();
+            // Publish
+            #[cfg(not(feature = "GOOGLE_PUBSUB"))]
+            for serialized in serialized_block_reward_records {
+                block_rewards_publisher.publish(serialized).await;
+            }
+            #[cfg(feature = "GOOGLE_PUBSUB")]
+            block_rewards_publisher
+                .publish_batch(serialized_block_reward_records)
+                .await;
 
             // Transformation for Transactions, Instructions & token transfers.
             let (transaction_records, instruction_records, token_transfer_records) =
                 transformation::transaction::transform_to_transaction_records(&packed_block);
 
+            // Transaction Records
+            publish_records(&transactions_publisher, transaction_records).await;
+
+            // Instruction Records
+            publish_records(&instructions_publisher, instruction_records).await;
+
+            // Token Transfer Records
+            publish_records(&token_transfers_publisher, token_transfer_records).await;
+
             let (account_records, token_records) =
                 transformation::account::transform_to_account_and_token_records(&packed_block);
 
-            // Publish
-            #[cfg(feature = "PUBLISH_WITH_NAME")]
-            {
-                let records_name = slot.to_string();
+            // Token Records
+            publish_records(&tokens_publisher, token_records).await;
 
-                // Block
-                blocks_publisher.publish(&records_name, block_record).await;
-
-                // Block Rewards
-                publish_records(
-                    &block_rewards_publisher,
-                    block_reward_records,
-                    Some(&records_name),
-                )
-                .await;
-
-                // Transactions
-                publish_records(
-                    &transactions_publisher,
-                    transaction_records,
-                    Some(&records_name),
-                )
-                .await;
-
-                // Instructions
-                publish_records(
-                    &instructions_publisher,
-                    instruction_records,
-                    Some(&records_name),
-                )
-                .await;
-
-                // Token Transfers
-                publish_records(
-                    &token_transfers_publisher,
-                    token_transfer_records,
-                    Some(&records_name),
-                )
-                .await;
-
-                // Tokens
-                publish_records(&tokens_publisher, token_records, Some(&records_name)).await;
-
-                // Accounts
-                publish_records(&accounts_publisher, account_records, Some(&records_name)).await;
-            }
-            #[cfg(not(feature = "PUBLISH_WITH_NAME"))]
-            {
-                // Block
-                blocks_publisher.publish(block_record).await;
-
-                // Block Rewards
-                publish_records(&block_rewards_publisher, block_reward_records, None).await;
-
-                // Transactions
-                publish_records(&transactions_publisher, transaction_records, None).await;
-
-                // Instructions
-                publish_records(&instructions_publisher, instruction_records, None).await;
-
-                // Token Transfers
-                publish_records(&token_transfers_publisher, token_transfer_records, None).await;
-
-                // Tokens
-                publish_records(&tokens_publisher, token_records, None).await;
-
-                // Accounts
-                publish_records(&accounts_publisher, account_records, None).await;
-            }
+            // Token Records
+            publish_records(&accounts_publisher, account_records).await;
         }
         info!("Sent block {} to stream queue", slot);
     }

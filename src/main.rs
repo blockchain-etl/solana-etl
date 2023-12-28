@@ -105,6 +105,7 @@ fn read_block_list_csv(file_path: &Path) -> Box<dyn Iterator<Item = u64>> {
         first_line
             .split(',')
             .all(|field| field.parse::<u64>().is_err())
+            && first_line.trim().parse::<u64>().is_err()
     };
 
     // create the csv reader with the apparent header setting
@@ -353,7 +354,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     .await
                     .unwrap();
 
-                    #[cfg(not(any(feature = "JSON", feature = "JSONL")))]
                     publisher.disconnect().await;
                 }
             }
@@ -397,8 +397,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     )
                     .await
                     .unwrap();
-
-                    #[cfg(not(any(feature = "JSON", feature = "JSONL")))]
                     publisher.disconnect().await;
                 }
             }

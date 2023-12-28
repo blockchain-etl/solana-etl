@@ -5,7 +5,12 @@ use super::publish::StreamPublisherConnection;
 use log::info;
 
 // Get the appropriate connect
-use super::publish::connect;
+#[cfg(feature = "GOOGLE_PUBSUB")]
+use super::google_pubsub::connect;
+#[cfg(feature = "RABBITMQ_CLASSIC")]
+use super::rabbitmq_classic::connect;
+#[cfg(feature = "RABBITMQ_STREAM")]
+use super::rabbitmq_stream::connect;
 
 /// StreamPublisher struct (single-publisher version) that contains a singular Stream for
 /// all output.

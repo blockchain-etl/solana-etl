@@ -14,10 +14,6 @@ pub fn build_protos() -> std::io::Result<()> {
     let mut config = prost_build::Config::default();
 
     config
-        .message_attribute(".", "#[derive(serde::Serialize, serde::Deserialize)]")
-        .enum_attribute(".", "#[derive(serde::Serialize, serde::Deserialize)]");
-
-    config
         .out_dir(out_dir.clone())
         .protoc_arg("--experimental_allow_proto3_optional")
         .compile_protos(

@@ -7,23 +7,8 @@ use super::{
     types::account_response_types::{AccountDataEnumResponse, AccountInfoInfoEnumResponse},
 };
 use crate::solana_config::constants;
-use borsh::BorshDeserialize;
-use solana_sdk::borsh0_10::try_from_slice_unchecked;
+use mpl_token_metadata::accounts::Metadata;
 use std::str::FromStr;
-
-#[derive(Clone, BorshDeserialize, Debug, PartialEq)]
-pub struct Metadata {
-    key: mpl_token_metadata::types::Key,
-    pub update_authority: solana_sdk::pubkey::Pubkey,
-    pub mint: solana_sdk::pubkey::Pubkey,
-    pub name: String,
-    pub symbol: String,
-    pub uri: String,
-    pub seller_fee_basis_points: u16,
-    pub creators: Option<Vec<mpl_token_metadata::types::Creator>>,
-    pub primary_sale_happened: bool,
-    pub is_mutable: bool,
-}
 
 /// Used to facilitate token data retrieval from the RPC Node, the struct contains
 /// mint data for tokens and whether it is a NFT
@@ -95,7 +80,7 @@ pub fn unpack_token_account(
             let [encoded_data, _encoding] = string_slice;
             let base64_decoded_data =
                 base64::Engine::decode(&base64::prelude::BASE64_STANDARD, encoded_data).unwrap();
-            let metadata = try_from_slice_unchecked::<Metadata>(&base64_decoded_data).unwrap();
+            let metadata = Metadata::from_bytes(&base64_decoded_data).unwrap();
 
             solana_account_protobuf::Token {
                 retrieval_timestamp: Some(UnixTimestamp {

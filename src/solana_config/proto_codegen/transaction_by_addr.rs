@@ -1,11 +1,9 @@
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TransactionByAddr {
     #[prost(message, repeated, tag = "1")]
     pub tx_by_addrs: ::prost::alloc::vec::Vec<TransactionByAddrInfo>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TransactionByAddrInfo {
@@ -20,14 +18,12 @@ pub struct TransactionByAddrInfo {
     #[prost(message, optional, tag = "5")]
     pub block_time: ::core::option::Option<UnixTimestamp>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Memo {
     #[prost(string, tag = "1")]
     pub memo: ::prost::alloc::string::String,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TransactionError {
@@ -38,7 +34,6 @@ pub struct TransactionError {
     #[prost(message, optional, tag = "3")]
     pub transaction_details: ::core::option::Option<TransactionDetails>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InstructionError {
@@ -49,28 +44,24 @@ pub struct InstructionError {
     #[prost(message, optional, tag = "3")]
     pub custom: ::core::option::Option<CustomError>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TransactionDetails {
     #[prost(uint32, tag = "1")]
     pub index: u32,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UnixTimestamp {
     #[prost(int64, tag = "1")]
     pub timestamp: i64,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CustomError {
     #[prost(uint32, tag = "1")]
     pub custom: u32,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum TransactionErrorType {
@@ -241,7 +232,6 @@ impl TransactionErrorType {
         }
     }
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum InstructionErrorType {

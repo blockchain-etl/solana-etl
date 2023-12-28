@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package solana.AccountInfo;
+option go_package = "./pbcodegen";
+
+import "confirmed_block.proto";
+
+message AccountInfo {
+    //TableContext tableContext = 1;
+    //AccountsWithContext accountsWithContext = 2;
+    optional string tx_signature = 1;
+    repeated Account accounts = 2;
+    repeated Token tokens = 3;
+}
+/*
+message TableContext {
+    uint64 block_number = 1;
+    optional int64 block_timestamp = 2;
+    string block_hash = 3;
+    optional string tx_signature = 5;
+} */
+
+/*message AccountsWithContext {
+    AccountContext context = 1;
+    repeated Account accounts = 2;
+}*/
+
+message AccountContext {
+    int32 slot = 1;
+}
+
+message Account {
+    string pubkey = 1;
+    bool executable = 2;
+    uint64 lamports = 3;
+    optional string owner = 4;
+    uint64 rentEpoch = 5;
+    optional int64 space = 6;
+    optional string program = 7;
+    optional string program_data = 8;
+    optional string account_type = 9;
+    optional bool is_native = 10;
+    optional string mint = 11;
+    optional string state = 12;
+    optional string token_amount = 13;
+    optional int64 token_amount_decimals = 14;
+    repeated AuthorizedVoter authorized_voters = 15;
+    optional string authorized_withdrawer = 16;
+    repeated PriorVoters prior_voters = 17;
+    optional string node_pubkey = 18;
+    optional int64 commission = 19;
+    repeated EpochCredit epoch_credits = 20;
+    repeated Votes votes = 21;
+    optional int64 root_slot = 22;
+    optional LastTimestamp last_timestamp = 23;
+    optional string mint_authority = 24;
+    optional string supply = 25;
+    optional EncodedData data = 26;
+    optional ConfirmedBlock.UnixTimestamp retrieval_timestamp = 27;
+}
+
+message EncodedData {
+    string raw = 1;
+    string encoding = 2;
+}
+
+message AuthorizedVoter {
+    string authorizedVoter = 1;
+    int64 epoch = 2;
+}
+
+message EpochCredit {
+    string credits = 1;
+    int64 epoch = 2;
+    string previous_credits = 3;
+}
+
+message PriorVoters {
+    string authorized_pubkey = 1;
+    int64 epoch_of_last_authorized_switch = 2;
+    int64 target_epoch = 3;
+}
+
+message LastTimestamp {
+    int64 slot = 1;
+    int64 timestamp = 2;
+}
+
+message Votes {
+    int64 slot = 1;
+    int64 confirmation_count = 2;
+    
+}
+
+message Token {
+    bool is_nft = 1;
+    string mint = 2;
+    string update_authority = 3;
+    string name = 4;
+    string symbol = 5;
+    string uri = 6;
+    uint32 seller_fee_basis_points = 7;
+    repeated Creator creators = 8;
+    bool primary_sale_happened = 9;
+    bool is_mutable = 10;
+    optional ConfirmedBlock.UnixTimestamp retrieval_timestamp = 11;
+
+}
+
+message Creator {
+    string address = 1;
+    bool verified = 2;
+    uint32 share = 3;
+}

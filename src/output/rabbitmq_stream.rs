@@ -87,8 +87,8 @@ pub async fn connect(queue_name: &str) -> StreamPublisherConnection {
 impl StreamPublisherConnection {
     /// Sends the message to the client
     #[inline]
-    pub async fn publish<T: prost::Message>(&self, msg: T) {
-        self.client.publish(msg.encode_to_vec()).await;
+    pub async fn publish(&self, msg: Vec<u8>) {
+        self.client.publish(msg).await;
     }
     /// Sends the message to the client
     pub async fn disconnect(self) {

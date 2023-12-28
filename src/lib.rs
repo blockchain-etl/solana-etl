@@ -1,3 +1,5 @@
+#![doc = include_str!("README.md")]
+
 mod constants;
 pub mod metrics;
 pub mod output;

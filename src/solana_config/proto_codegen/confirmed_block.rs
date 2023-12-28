@@ -1,4 +1,3 @@
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ConfirmedBlock {
@@ -19,7 +18,6 @@ pub struct ConfirmedBlock {
     #[prost(uint64, tag = "8")]
     pub leader_reward: u64,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ConfirmedTransaction {
@@ -28,7 +26,6 @@ pub struct ConfirmedTransaction {
     #[prost(message, optional, tag = "2")]
     pub meta: ::core::option::Option<TransactionStatusMeta>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Transaction {
@@ -37,7 +34,6 @@ pub struct Transaction {
     #[prost(message, optional, tag = "2")]
     pub message: ::core::option::Option<Message>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CompiledAccount {
@@ -50,7 +46,6 @@ pub struct CompiledAccount {
     #[prost(bool, tag = "4")]
     pub writable: bool,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Message {
@@ -67,7 +62,6 @@ pub struct Message {
     #[prost(message, repeated, tag = "6")]
     pub address_table_lookups: ::prost::alloc::vec::Vec<MessageAddressTableLookup>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MessageHeader {
@@ -78,7 +72,6 @@ pub struct MessageHeader {
     #[prost(uint32, tag = "3")]
     pub num_readonly_unsigned_accounts: u32,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MessageAddressTableLookup {
@@ -89,7 +82,6 @@ pub struct MessageAddressTableLookup {
     #[prost(bytes = "vec", tag = "3")]
     pub readonly_indexes: ::prost::alloc::vec::Vec<u8>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TransactionStatusMeta {
@@ -125,14 +117,12 @@ pub struct TransactionStatusMeta {
     #[prost(uint64, optional, tag = "16")]
     pub compute_units_consumed: ::core::option::Option<u64>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TransactionError {
     #[prost(string, tag = "1")]
     pub err: ::prost::alloc::string::String,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InnerInstructions {
@@ -141,7 +131,6 @@ pub struct InnerInstructions {
     #[prost(message, repeated, tag = "2")]
     pub instructions: ::prost::alloc::vec::Vec<InnerInstruction>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InnerInstruction {
@@ -163,7 +152,6 @@ pub struct InnerInstruction {
     #[prost(message, optional, tag = "7")]
     pub parsed_dict: ::core::option::Option<Parsed>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Parsed {
@@ -176,7 +164,6 @@ pub struct Parsed {
     #[prost(message, optional, tag = "4")]
     pub token_transfer_instruction: ::core::option::Option<TokenTransferInstruction>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TokenTransferInstruction {
@@ -205,7 +192,6 @@ pub struct TokenTransferInstruction {
     #[prost(uint64, optional, tag = "12")]
     pub fee_amount_decimals: ::core::option::Option<u64>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TokenBalance {
@@ -220,7 +206,6 @@ pub struct TokenBalance {
     #[prost(string, tag = "5")]
     pub program_id: ::prost::alloc::string::String,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UiTokenAmount {
@@ -233,7 +218,6 @@ pub struct UiTokenAmount {
     #[prost(string, tag = "4")]
     pub ui_amount_string: ::prost::alloc::string::String,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReturnData {
@@ -242,7 +226,6 @@ pub struct ReturnData {
     #[prost(string, tag = "2")]
     pub data: ::prost::alloc::string::String,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Reward {
@@ -257,28 +240,24 @@ pub struct Reward {
     #[prost(string, tag = "5")]
     pub commission: ::prost::alloc::string::String,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Rewards {
     #[prost(message, repeated, tag = "1")]
     pub rewards: ::prost::alloc::vec::Vec<Reward>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UnixTimestamp {
     #[prost(int64, tag = "1")]
     pub timestamp: i64,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BlockHeight {
     #[prost(uint64, tag = "1")]
     pub block_height: u64,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum RewardType {
