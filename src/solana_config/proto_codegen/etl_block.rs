@@ -1,6 +1,5 @@
 /// these fields are optional so that we can either send a block, or accounts data, or transactions data - and use a single protobuf and pub/sub topic.
 /// accounts data + block data is very large, so splitting them up ensures we don't exceed google pub/sub's 10mb message limit.
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EtlBlock {
@@ -19,7 +18,6 @@ pub struct EtlBlock {
     #[prost(message, optional, tag = "6")]
     pub table_context: ::core::option::Option<TableContext>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TableContext {

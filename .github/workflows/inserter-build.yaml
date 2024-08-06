@@ -1,0 +1,49 @@
+name: inserter-build
+on:
+  workflow_call:
+
+env:
+  GOMOD: ${{ github.workspace }}/storage-write/deprecated/go.mod
+  GOMODULE_DIR:  ${{ github.workspace }}/storage-write/deprecated
+  GO_VERSION: '1.20.x'
+  PROTOC_VERSION: '23.2'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.GO_VERSION }}
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update && sudo apt-get install -y g++
+        go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+        go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+        cd ${{ env.GOMODULE_DIR }}
+        go mod tidy
+        go mod download
+
+    - name: Download and install protoc
+      run: |
+        curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v${{ env.PROTOC_VERSION }}/protoc-${{ env.PROTOC_VERSION }}-linux-x86_64.zip
+        unzip protoc-${{ env.PROTOC_VERSION }}-linux-x86_64.zip -d $HOME/.local
+  
+    - name: Build
+      env:
+        CGO_ENABLED: 0
+        GOOS: linux
+      run: |
+        cd ${{ env.GOMODULE_DIR }}
+        go generate
+        go build -o ${{ github.workspace }}/target/release/blockchain_etl_inserter main.go
+
+    - name: Upload Release Asset
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release upload ${{ github.event.release.tag_name }} target/release/blockchain_etl_inserter --clobber
+

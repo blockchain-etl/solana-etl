@@ -68,7 +68,6 @@ prost-build = { version = "0.12.1" }
 lto = true
 
 [features]
-default = ["SOLANA", "SEPARATE_PUBLISHERS"]
 # Solana features
 SOLANA_BIGTABLE = ["SOLANA", "dep:solana-storage-bigtable"]
 SOLANA = [

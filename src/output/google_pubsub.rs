@@ -14,8 +14,6 @@ use google_cloud_pubsub::{
     publisher::Publisher,
 };
 
-use prost::Message;
-
 use super::publish::{StreamPublisherConnection, StreamPublisherConnectionClient};
 
 /// Establishes the connection to the Google Cloud Pub/Sub extracting the credentials
@@ -160,14 +158,12 @@ async fn publish_batch_with_backoff(publisher: &Publisher, messages: Vec<PubsubM
 
 impl StreamPublisherConnection {
     /// Sends the message to the client
-    pub async fn publish<T: Message>(&self, msg: T) {
-        self.client.publish(msg.encode_to_vec()).await;
+    pub async fn publish(&self, msg: Vec<u8>) {
+        self.client.publish(msg).await;
     }
     /// Sends the messages to the client
-    pub async fn publish_batch<T: Message>(&self, msgs: Vec<T>) {
-        self.client
-            .publish_batch(msgs.iter().map(|msg| msg.encode_to_vec()).collect())
-            .await;
+    pub async fn publish_batch(&self, msgs: Vec<Vec<u8>>) {
+        self.client.publish_batch(msgs).await;
     }
 
     /// Sends the message to the client

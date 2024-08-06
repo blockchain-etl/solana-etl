@@ -5,10 +5,9 @@
 //! confused with RabbitMQ Stream)
 
 use super::publish::{StreamPublisherConnection, StreamPublisherConnectionClient};
-use log::info;
-use prost::Message;
 
 //use amqprs::channel::Channel;
+use log::info;
 
 /// Connects to the RabbitMQ Classic queue system.
 /// Expects the following parameters to be stored in the .env file:
@@ -111,16 +110,12 @@ impl StreamPublisherConnection {
     /// `queue_name`, but also with a channel that will only be functional in the current
     /// thread.
     #[inline]
-    pub async fn publish<T: Message>(&self, msg: T) {
+    pub async fn publish(&self, msg: Vec<u8>) {
         let args = amqprs::channel::BasicPublishArguments::new("", &self.queue_name);
         self.channel
             .as_ref()
             .unwrap()
-            .basic_publish(
-                amqprs::BasicProperties::default(),
-                msg.encode_to_vec(),
-                args.clone(),
-            )
+            .basic_publish(amqprs::BasicProperties::default(), msg, args.clone())
             .await
             .unwrap();
     }

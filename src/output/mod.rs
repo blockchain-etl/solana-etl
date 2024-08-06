@@ -13,10 +13,4 @@ pub mod rabbitmq_classic;
 #[cfg(feature = "RABBITMQ_STREAM")]
 pub mod rabbitmq_stream;
 
-#[cfg(feature = "JSONL")]
-pub mod jsonl;
-
-#[cfg(feature = "JSON")]
-pub mod json;
-
 pub mod tests;

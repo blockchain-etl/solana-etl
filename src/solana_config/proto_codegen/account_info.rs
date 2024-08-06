@@ -1,4 +1,3 @@
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AccountInfo {
@@ -12,7 +11,6 @@ pub struct AccountInfo {
     pub tokens: ::prost::alloc::vec::Vec<Token>,
 }
 /// Protocol Buffer for context, however only contains slot, not the API version
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AccountContext {
@@ -20,7 +18,6 @@ pub struct AccountContext {
     pub slot: i32,
 }
 /// Protocol Buffer for AccountInfo
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Account {
@@ -82,7 +79,6 @@ pub struct Account {
     >,
 }
 /// Encoded data stores the raw data as a string along with the encoding utilized.
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EncodedData {
@@ -92,7 +88,6 @@ pub struct EncodedData {
     pub encoding: ::prost::alloc::string::String,
 }
 /// Authorized voter contains the pubkey and the epoch
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AuthorizedVoter {
@@ -102,7 +97,6 @@ pub struct AuthorizedVoter {
     pub epoch: i64,
 }
 /// Credits earned in the epoch
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EpochCredit {
@@ -113,7 +107,6 @@ pub struct EpochCredit {
     #[prost(string, tag = "3")]
     pub previous_credits: ::prost::alloc::string::String,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PriorVoters {
@@ -124,7 +117,6 @@ pub struct PriorVoters {
     #[prost(int64, tag = "3")]
     pub target_epoch: i64,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LastTimestamp {
@@ -133,7 +125,6 @@ pub struct LastTimestamp {
     #[prost(int64, tag = "2")]
     pub timestamp: i64,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Votes {
@@ -142,7 +133,6 @@ pub struct Votes {
     #[prost(int64, tag = "2")]
     pub confirmation_count: i64,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Token {
@@ -171,7 +161,6 @@ pub struct Token {
         super::confirmed_block::UnixTimestamp,
     >,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Creator {

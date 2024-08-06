@@ -9,10 +9,6 @@ use log::info;
 
 #[cfg(feature = "GOOGLE_PUBSUB")]
 use blockchain_generic::output::google_pubsub::connect;
-#[cfg(feature = "JSON")]
-use blockchain_generic::output::json::connect;
-#[cfg(feature = "JSONL")]
-use blockchain_generic::output::jsonl::connect;
 #[cfg(feature = "RABBITMQ_CLASSIC")]
 use blockchain_generic::output::rabbitmq_classic::connect;
 #[cfg(feature = "RABBITMQ_STREAM")]
@@ -47,7 +43,6 @@ impl StreamPublisher {
         }
     }
 
-    #[cfg(not(feature = "PUBLISH_WITH_NAME"))]
     pub async fn disconnect(self) {
         info!("Disconnecting from publishers...");
         self.blocks.disconnect().await;

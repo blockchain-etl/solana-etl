@@ -1,4 +1,3 @@
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BlockRecord {
@@ -19,7 +18,6 @@ pub struct BlockRecord {
     #[prost(string, optional, tag = "8")]
     pub leader: ::core::option::Option<::prost::alloc::string::String>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BlockRewardRecord {
@@ -40,7 +38,6 @@ pub struct BlockRewardRecord {
     #[prost(string, optional, tag = "8")]
     pub reward_type: ::core::option::Option<::prost::alloc::string::String>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TransactionRecord {
@@ -75,7 +72,6 @@ pub struct TransactionRecord {
     #[prost(message, repeated, tag = "15")]
     pub post_token_balances: ::prost::alloc::vec::Vec<TokenBalanceRecord>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TransactionAccountRecord {
@@ -86,7 +82,6 @@ pub struct TransactionAccountRecord {
     #[prost(bool, optional, tag = "3")]
     pub writable: ::core::option::Option<bool>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BalanceChangeRecord {
@@ -97,7 +92,6 @@ pub struct BalanceChangeRecord {
     #[prost(uint64, optional, tag = "3")]
     pub after: ::core::option::Option<u64>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TokenBalanceRecord {
@@ -112,7 +106,6 @@ pub struct TokenBalanceRecord {
     #[prost(int64, optional, tag = "5")]
     pub decimals: ::core::option::Option<i64>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InstructionRecord {
@@ -143,7 +136,6 @@ pub struct InstructionRecord {
     #[prost(message, repeated, tag = "13")]
     pub params: ::prost::alloc::vec::Vec<ParamsRecord>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ParamsRecord {
@@ -152,7 +144,6 @@ pub struct ParamsRecord {
     #[prost(string, optional, tag = "2")]
     pub value: ::core::option::Option<::prost::alloc::string::String>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AccountRecord {
@@ -215,7 +206,6 @@ pub struct AccountRecord {
     #[prost(message, repeated, tag = "29")]
     pub data: ::prost::alloc::vec::Vec<DataRecord>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AuthorizedVoterRecord {
@@ -224,7 +214,6 @@ pub struct AuthorizedVoterRecord {
     #[prost(int64, optional, tag = "2")]
     pub epoch: ::core::option::Option<i64>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PriorVoterRecord {
@@ -235,7 +224,6 @@ pub struct PriorVoterRecord {
     #[prost(int64, optional, tag = "3")]
     pub target_epoch: ::core::option::Option<i64>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EpochCreditRecord {
@@ -246,7 +234,6 @@ pub struct EpochCreditRecord {
     #[prost(string, optional, tag = "3")]
     pub previous_credits: ::core::option::Option<::prost::alloc::string::String>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct VoteRecord {
@@ -255,7 +242,6 @@ pub struct VoteRecord {
     #[prost(int64, optional, tag = "2")]
     pub slot: ::core::option::Option<i64>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TimestampRecord {
@@ -264,7 +250,6 @@ pub struct TimestampRecord {
     #[prost(int64, optional, tag = "2")]
     pub slot: ::core::option::Option<i64>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DataRecord {
@@ -273,7 +258,6 @@ pub struct DataRecord {
     #[prost(string, optional, tag = "2")]
     pub encoding: ::core::option::Option<::prost::alloc::string::String>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TokenRecord {
@@ -308,7 +292,6 @@ pub struct TokenRecord {
     #[prost(bool, optional, tag = "15")]
     pub is_mutable: ::core::option::Option<bool>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreatorRecord {
@@ -319,7 +302,6 @@ pub struct CreatorRecord {
     #[prost(int64, optional, tag = "3")]
     pub share: ::core::option::Option<i64>,
 }
-#[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TokenTransferRecord {
