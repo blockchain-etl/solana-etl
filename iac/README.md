@@ -25,15 +25,15 @@ This repository contains the necessary infrastructure as code to set up a Solana
     ```bash
     terraform apply -auto-approve
     ```
-3. Note: Make sure to replace the [bucket name](./init/main.tf) with your own.
+3. Note: Make sure to replace the [bucket name](./init/main.tf#L10) with your own.
 
 ### 2. Environment Provisioning
 1. Move to the `main/` directory.
-2. Adapt the [variables.tf](./main/variables.tf) file to your needs and run the Terraform scripts to set up the GCP environment, including firewalls, VPC, and other required infrastructure components:
+2. Adapt the [variables.tf](./main/variables.tf#L14) file to your needs and run the Terraform scripts to set up the GCP environment, including firewalls, VPC, and other required infrastructure components:
     ```bash
     terraform apply -auto-approve
     ```
-3. Note: Make sure to replace the [project_id](./main/variables.tf) and [bucket name](./main/provider.tf) with your own.
+3. Note: Make sure to replace the [project_id](./main/variables.tf#L14) and [bucket name](./main/provider.tf#L10) with your own.
 
 ### 3. App Provisioning
 1. The Terraform code will create:
@@ -46,8 +46,9 @@ This repository contains the necessary infrastructure as code to set up a Solana
 4. To connect to a pre-existing BigQuery dataset:
    - A GCP service account with `roles/bigquery.dataEditor` on the target BigQuery dataset is required.
    - The service account key needs to be copied to the Indexer VM.
-   - The location of the service account key is defined by the `SERVICE_ENVIRONMENT` variable in the [script](./scripts/indexer/indexer-service.sh#L4).
-5. Note: If the target BigQuery dataset is in the same project, the service account key is not required.
+   - The location of the service account key is defined by the `SERVICE_ENVIRONMENT` variable in the [script](./scripts/inserter/inserter-service.sh#L10).
+5. Make sure the [slot value](./scripts/indexer/indexer-service.sh#12) is not older than the `Full Snapshot Slot` value from the Solana RPC node.
+6. Note: If the target BigQuery dataset is in the same project, the service account key is not required.
 
 ### 4. BigQuery Provisioning
 1. The BigQuery dataset is provisioned by the [bq.tf](./main/bq.tf) file with pre-created data tables.
