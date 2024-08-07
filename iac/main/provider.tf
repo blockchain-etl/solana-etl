@@ -3,8 +3,12 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 5.2"
+      version = "~> 5.40.0"
     }
+  }
+  backend "gcs" {
+    bucket = <your bucket name>
+    prefix = "solana-bq/bq"
   }
 }
 
@@ -19,5 +23,3 @@ provider "google-beta" {
 
 data "google_client_config" "this" {}
 data "google_project" "this" {}
-
-

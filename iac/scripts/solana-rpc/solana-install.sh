@@ -38,13 +38,50 @@ create_user_sol() {
 install_solana() {
     if ! su - sol -c 'solana --version' &>/dev/null; then
         log_message "Installing Solana for user sol"
-        su - sol -c 'sh -c "$(curl -sSfL https://release.solana.com/v1.17.9/install)"' || handle_error "Solana installation failed"
+        su - sol -c 'sh -c "$(curl -sSfL https://release.solana.com/v1.18.18/install)"' || handle_error "Solana installation failed"
         echo 'export PATH=$PATH:/home/sol/.local/share/solana/install/active_release/bin' >> /home/sol/.bashrc || handle_error "Failed to set PATH for Solana"
     else
         log_message "Solana is already installed for user sol"
     fi
 }
 
+# Create and configure tmpfs and swap
+configure_tmpfs_and_swap() {
+    log_message "Configuring tmpfs and swap"
+    
+    # Create the directory for Solana accounts
+    mkdir -p /mnt/solana-accounts || handle_error "Failed to create /mnt/solana-accounts directory"
+    
+    # Add tmpfs entry to /etc/fstab
+    if ! grep -q '/mnt/solana-accounts' /etc/fstab; then
+        echo 'tmpfs /mnt/solana-accounts tmpfs rw,size=400G,user=sol 0 0' >> /etc/fstab || handle_error "Failed to add tmpfs entry to /etc/fstab"
+    else
+        log_message "tmpfs entry already exists in /etc/fstab"
+    fi
+    
+    # Create swap file
+    if ! grep -q '/swapfile' /etc/fstab; then
+        log_message "Creating swap file"
+        dd if=/dev/zero of=/swapfile bs=1MiB count=250KiB || handle_error "Failed to create swap file"
+        chmod 0600 /swapfile || handle_error "Failed to set permissions for swap file"
+        mkswap /swapfile || handle_error "Failed to format swap file"
+        echo '/swapfile swap swap defaults 0 0' >> /etc/fstab || handle_error "Failed to add swap file entry to /etc/fstab"
+    else
+        log_message "Swap file entry already exists in /etc/fstab"
+    fi
+
+    # Enable swap
+    swapon -a || handle_error "Failed to enable swap"
+    
+    # Mount tmpfs
+    mount /mnt/solana-accounts || handle_error "Failed to mount tmpfs"
+    
+    # Confirm swap is active and tmpfs is mounted
+    free -g || handle_error "Failed to confirm swap"
+    mount | grep tmpfs || handle_error "Failed to confirm tmpfs"
+}
+
+# Create user sol log directory
 create_sol_log_directory() {
     local sol_log_dir="/home/sol/log"
     if [ ! -d "$sol_log_dir" ]; then
@@ -56,6 +93,7 @@ create_sol_log_directory() {
     fi
 }
 
+# Configure log rotation
 configure_log_rotation() {
     local logrotate_conf="/etc/logrotate.d/solana-validator"
     
@@ -87,7 +125,6 @@ create_validator_identity() {
     fi
 }
 
-
 # Create Validator Start Script
 create_validator_script() {
     if [ ! -f /home/sol/rpc-start.sh ]; then
@@ -100,8 +137,12 @@ set -o errexit
 
 # Validator start commands
 solana-validator \
- --entrypoint entrypoint.mainnet-beta.solana.com:8001\
- --known-validator 7Np41oeYqPefeNQEHSv1UDhYrehxin3NStELsSKCT4K2\
+ --entrypoint entrypoint.mainnet-beta.solana.com:8001 \
+ --entrypoint entrypoint2.mainnet-beta.solana.com:8001 \
+ --entrypoint entrypoint3.mainnet-beta.solana.com:8001 \
+ --entrypoint entrypoint4.mainnet-beta.solana.com:8001 \
+ --entrypoint entrypoint5.mainnet-beta.solana.com:8001 \
+ --known-validator 7Np41oeYqPefeNQEHSv1UDhYrehxin3NStELsSKCT4K2 \
  --known-validator GdnSyH3YtwcxFvQrVVJMm1JhTS4QVX7MFsX56uJLUfiZ \
  --known-validator DE1bawNcRJB9rVm3buyMVfr8mBEoyyu73NBovf2oXJsJ \
  --known-validator CakcnaRDHka2gXyfbEd2d3xsvkJkqsLw2akB3zsN1D2S \
@@ -113,7 +154,7 @@ solana-validator \
  --no-voting \
  --no-wait-for-vote-to-start-leader \
  --accounts /mnt/solana-accounts \
- --ledger /solana/ledger  \
+ --ledger /solana/ledger \
  --limit-ledger-size 100000000 \
  --snapshot-interval-slots 5000 \
  --maximum-local-snapshot-age 500 \
@@ -122,16 +163,56 @@ solana-validator \
  --enable-cpi-and-log-storage \
  --full-rpc-api \
  --private-rpc \
- --snapshots /solana/rest\
- --accounts-index-path /solana/data/rest\
- --accounts-hash-cache-path /solana/rest/cache\
- --log ~/log/validator.log
+ --snapshots /solana/rest \
+ --accounts-index-path /solana/rest/indexes \
+ --accounts-hash-cache-path /solana/rest/cache \
+ --log /home/sol/solana-rpc.log
 EOF
         chmod +x /home/sol/rpc-start.sh || handle_error "Failed to create validator start script"
         chown sol:sol /home/sol/rpc-start.sh
     else
         log_message "Validator start script already exists"
     fi
+}
+
+# Optimize sysctl knobs
+optimize_sysctl() {
+    log_message "Optimizing sysctl knobs"
+    cat > /etc/sysctl.d/21-solana-validator.conf <<EOF
+# Increase UDP buffer sizes
+net.core.rmem_default = 134217728
+net.core.rmem_max = 134217728
+net.core.wmem_default = 134217728
+net.core.wmem_max = 134217728
+
+# Increase memory mapped files limit
+vm.max_map_count = 1000000
+
+# Increase number of allowed open file descriptors
+fs.nr_open = 1000000
+EOF
+
+    sysctl -p /etc/sysctl.d/21-solana-validator.conf || handle_error "Failed to apply sysctl configurations"
+}
+
+# Increase session file limits
+increase_file_limits() {
+    log_message "Increasing systemd and session file limits"
+
+    # Ensure systemd service file limits are set
+    if ! grep -q "DefaultLimitNOFILE=1000000" /etc/systemd/system.conf; then
+        log_message "Setting DefaultLimitNOFILE in /etc/systemd/system.conf"
+        echo "DefaultLimitNOFILE=1000000" >> /etc/systemd/system.conf || handle_error "Failed to set DefaultLimitNOFILE in /etc/systemd/system.conf"
+    fi
+
+    # Reload systemd configuration
+    systemctl daemon-reload || handle_error "Failed to reload systemd daemon"
+
+    # Set session file limits
+    cat > /etc/security/limits.d/90-solana-nofiles.conf <<EOF
+# Increase process file descriptor count limit
+* - nofile 1000000
+EOF
 }
 
 # Create and Enable Systemd Service
@@ -176,13 +257,60 @@ start_solana_rpc_service() {
     fi
 }
 
+# Install Nginx
+install_nginx() {
+    log_message "Installing Nginx"
+    apt update || handle_error "Failed to update package list"
+    apt install -y nginx || handle_error "Failed to install Nginx"
+}
+
+# Create Nginx configuration for Solana RPC and remove the default configuration
+configure_nginx() {
+    log_message "Configuring Nginx for Solana RPC"
+
+    # Remove the default Nginx configuration
+    rm /etc/nginx/sites-enabled/default || handle_error "Failed to remove default Nginx configuration"
+    
+    # Create new Nginx configuration
+    cat > /etc/nginx/sites-available/rpc.conf <<EOF
+server {
+    listen 80;
+    server_name 10.0.0.12;  
+
+    location /rpc {
+        proxy_pass http://localhost:8899;  # Pointing to the local Solana RPC endpoint
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_cache_bypass \$http_upgrade;
+
+        # Additional headers to forward (optional)
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP \$remote_addr;
+    }
+}
+EOF
+    
+    # Enable the new configuration
+    ln -s /etc/nginx/sites-available/rpc.conf /etc/nginx/sites-enabled/rpc.conf || handle_error "Failed to enable new Nginx configuration"
+    
+    # Restart Nginx to apply the changes
+    systemctl restart nginx || handle_error "Failed to restart Nginx"
+}
+
 # Main execution
 log_message "Starting Solana installation and configuration script"
 create_user_sol
 install_solana
+configure_tmpfs_and_swap
 create_validator_identity
 create_validator_script
+optimize_sysctl
+increase_file_limits
 create_systemd_service
+install_nginx
+configure_nginx
 start_solana_rpc_service
 log_message "Solana installation and configuration completed successfully"
 

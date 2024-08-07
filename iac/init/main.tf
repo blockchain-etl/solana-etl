@@ -6,20 +6,24 @@ terraform {
       version = "~> 5.2"
     }
   }
+  backend "gcs" {
+    bucket = <your bucket name>
+    prefix = "solana-bq/init"
+  }
 }
 
 
 variable "region" {
-  default = "us-east"
+  default = "us-central1"
 }
 
 variable "project" {
-    default =
+  default = "project-name"
 }
 
 locals {
-  project_id = ""
-  region     = ""
+  project_id = <your project id>
+  region     = "us-central1"
   env        = "shared"
   default_labels = {
     env        = local.env

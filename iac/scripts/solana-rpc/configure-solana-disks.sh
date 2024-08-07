@@ -55,6 +55,25 @@ update_fstab() {
     echo "UUID=$uuid $mount_point ext4 discard,defaults,nofail 0 2" >> /etc/fstab || handle_error $?
 }
 
+# Create user and password
+create_user() {
+    local username="$1"
+    local password="$2"
+
+    if [ -z "$username" ] || [ -z "$password" ]; then
+        log_message "Username and password are required"
+        exit 1
+    fi
+
+    log_message "Creating user '$username'"
+    useradd -m -s /bin/bash "$username" || handle_error "Failed to create user '$username'"   
+    echo "$username:$password" | chpasswd || handle_error "Failed to set password for user '$username'"
+    # Add user 'sol' to 'sudo' group
+    log_message "Adding user 'sol' to 'sudo' group"
+    usermod -aG sudo $username || handle_error "Failed to add user '$username' to 'sudo' group"
+}
+
+
 # Function to set permissions and ownership
 set_permissions() {
     local directory="$1"
@@ -92,6 +111,7 @@ update_fstab /dev/md0 /solana/ledger
 update_fstab /dev/md1 /solana/rest
 
 # Set permissions and ownership
+create_user sol sol
 set_permissions /solana/ledger sol sol
 set_permissions /solana/rest sol sol
 
