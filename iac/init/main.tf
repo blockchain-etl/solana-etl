@@ -18,7 +18,7 @@ variable "region" {
 }
 
 variable "project" {
-  default = "bcwt-sandbox"
+  default = "project-name"
 }
 
 locals {
