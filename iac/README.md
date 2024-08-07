@@ -55,7 +55,7 @@ This repository contains the necessary infrastructure as code to set up a Solana
 
 ### 5. Solana Node Configuration
 1. After provisioning the infrastructure, download and run the scripts located in the `scripts/solana-rpc` directory on the Solana node.
-2. These scripts handle disk configuration, Solana RPC node setup, and will expose the RPC port on `8899`.
+2. These scripts handle disk configuration, Solana RPC node setup, and will expose the RPC port on `8899` internally which will be proxied through Nginx on port 80.
 3. Execute the `configure-solana-disks.sh` script first and ensure it completes successfully:
     ```bash
     chmod +x configure-solana-disks.sh
