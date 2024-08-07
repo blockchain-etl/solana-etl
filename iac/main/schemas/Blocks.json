@@ -1,0 +1,50 @@
+[
+    {
+        "name": "slot",
+        "type": "INTEGER",
+        "mode": "REQUIRED",
+        "description": "The block's slot"
+    },
+    {
+        "name": "block_hash",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "The block's hash"
+    },
+    {
+        "name": "block_timestamp",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE",
+        "description": "The block's timestamp"
+    },
+    {
+        "name": "height",
+        "type": "INTEGER",
+        "mode": "NULLABLE",
+        "description": "The block height"
+    },
+    {
+        "name": "previous_block_hash",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The hash of the previous block"
+    },
+    {
+        "name": "transaction_count",
+        "type": "INTEGER",
+        "mode": "NULLABLE",
+        "description": "The number of transactions in the block"
+    },
+    {
+        "name": "leader_reward",
+        "type": "NUMERIC",
+        "mode": "NULLABLE",
+        "description": "The amount of rewarded SOL, in Lamports, of the leading validator"
+    },
+    {
+        "name": "leader",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The leading validator account"
+    }
+]

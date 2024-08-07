@@ -14,12 +14,12 @@ resource "google_compute_firewall" "allow_ssh_iap" {
 resource "google_compute_firewall" "solana-rpc" {
   name = "solana-rpc"
   allow {
-    ports    = ["8000-10000"]
+    ports    = ["8000-10000", "80"]
     protocol = "udp"
   }
 
   allow {
-    ports    = ["8000-10000"]
+    ports    = ["8000-10000", "80"]
     protocol = "tcp"
   }
 
@@ -29,4 +29,20 @@ resource "google_compute_firewall" "solana-rpc" {
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["solana"]
 }
+
+resource "google_compute_firewall" "allow_rabbitmq" {
+  name          = "allow-rabbitmq"
+  network       = google_compute_network.solana_etl.self_link
+  direction     = "INGRESS"
+  priority      = 1000
+  source_ranges = ["0.0.0.0/0"]
+
+  allow {
+    protocol = "tcp"
+    ports    = ["5672"]
+  }
+
+  target_tags = ["solana"]
+}
+
 

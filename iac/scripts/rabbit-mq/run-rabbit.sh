@@ -59,14 +59,19 @@ enable_management_plugin() {
 # Configure RabbitMQ
 configure_rabbitmq() {
     log_message "Configuring RabbitMQ"
-    read -p "Enter RabbitMQ user: " RABBITMQ_USER
-    read -sp "Enter RabbitMQ password: " RABBITMQ_PASSWORD
-    echo
-    read -p "Enter RabbitMQ vhost: " RABBITMQ_VHOST
-    read -p "Enter RabbitMQ queue name: " RABBITMQ_QUEUE
+    # read -p "Enter RabbitMQ user: " RABBITMQ_USER
+    # read -sp "Enter RabbitMQ password: " RABBITMQ_PASSWORD
+    # echo
+    # read -p "Enter RabbitMQ vhost: " RABBITMQ_VHOST
+    # read -p "Enter RabbitMQ queue name: " RABBITMQ_QUEUE
+    RABBITMQ_USER="jb"
+    RABBITMQ_PASSWORD="jb"
+    RABBITMQ_VHOST="/"
+    RABBITMQ_QUEUE="solana-etl"
     
     rabbitmqctl add_vhost $RABBITMQ_VHOST || handle_error "Failed to add vhost $RABBITMQ_VHOST"
     rabbitmqctl add_user $RABBITMQ_USER $RABBITMQ_PASSWORD || handle_error "Failed to add user $RABBITMQ_USER"
+    rabbitmqctl set_user_tags $RABBITMQ_USER administrator || handle_error "Failed to set user tags for $RABBITMQ_USER"
     rabbitmqctl set_permissions -p $RABBITMQ_VHOST $RABBITMQ_USER "." "." ".*" || handle_error "Failed to set permissions for user $RABBITMQ_USER"
     rabbitmqadmin declare queue --vhost=$RABBITMQ_VHOST name=$RABBITMQ_QUEUE durable=true || handle_error "Failed to declare queue $RABBITMQ_QUEUE"
 }

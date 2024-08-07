@@ -1,0 +1,50 @@
+[
+    {
+        "name": "block_slot",
+        "type": "INTEGER",
+        "mode": "REQUIRED",
+        "description": "The block's slot"
+    },
+    {
+        "name": "block_hash",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "The block's hash"
+    },
+    {
+        "name": "block_timestamp",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE",
+        "description": "The block's timestamp"
+    },
+    {
+        "name": "commission",
+        "type": "NUMERIC",
+        "mode": "NULLABLE",
+        "description": "The fee that the validator collected from staking delegators"
+    },
+    {
+        "name": "lamports",
+        "type": "NUMERIC",
+        "mode": "NULLABLE",
+        "description": "The amount of reward SOL, in Lamports"
+    },
+    {
+        "name": "post_balance",
+        "type": "NUMERIC",
+        "mode": "NULLABLE",
+        "description": "The account balance, in Lamports, after receiving the reward"
+    },
+    {
+        "name": "pubkey",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The public key of the account that received the reward"
+    },
+    {
+        "name": "reward_type",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The type of reward, such as fee, rent, voting, or staking"
+    }
+]
