@@ -38,7 +38,7 @@ chmod +x ${SERVICE_WORKING_DIRECTORY}/main
 # Create the .env file
 cat <<EOF > $ENV_FILE_PATH
 QUEUE_NAME="solana-etl"
-BQ_PROJECT_ID="bcwt-sandbox"
+BQ_PROJECT_ID="<your project ID>"
 BQ_DATASET_ID="crypto_solana_mainnet_us"
 RABBITMQ_USER="jb"
 RABBITMQ_PASS="jb"
