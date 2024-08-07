@@ -48,9 +48,9 @@ This repository contains the necessary infrastructure as code to set up a Solana
    - The service account key needs to be copied to the Indexer VM.
    - The location of the service account key is defined by the `SERVICE_ENVIRONMENT` variable in the [script](./scripts/inserter/inserter-service.sh#L10).
    - The dateset name is speficied in the [inserter script](./scripts/inserter/inserter-service.sh#L42).
-   Note: Make sure to replace the [BQ_PROJECT_ID](./scripts/inserter/inserter-service.sh#L41) by your own project ID.
-5. Make sure the [slot value](./scripts/indexer/indexer-service.sh#L12) is not older than the `Full Snapshot Slot` value from the Solana RPC node.
-6. Note: If the target BigQuery dataset is in the same project, the service account key is not required.
+5. Note: Make sure to replace the [BQ_PROJECT_ID](./scripts/inserter/inserter-service.sh#L41) by your own project ID.
+6. Make sure the [slot value](./scripts/indexer/indexer-service.sh#L12) is not older than the `Full Snapshot Slot` value from the Solana RPC node.
+7. Note: If the target BigQuery dataset is in the same project, the service account key is not required.
 
 ### 4. BigQuery Provisioning
 1. The BigQuery dataset is provisioned by the [bq.tf](./main/bq.tf) file with pre-created data tables.
