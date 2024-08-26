@@ -155,6 +155,7 @@ Now that you have set up your Google Cloud project and created a bucket for the 
 
 Specify the version for the Indexer app with the `VERSION` variable defined in the [script](./scripts/indexer/indexer-service.sh#L4).
 Specify the version for the Inserter app with the `VERSION` variable defined in the [script](./scripts/inserter/inserter-service.sh#L4).
+Specify the project ID for the Inserter app with `PROJECT_ID` variable defined in the  [script](./scripts/inserter/inserter-service.sh#L13).
 
 Latest application releases can be found here: https://github.com/blockchain-etl/solana-etl/releases
 
