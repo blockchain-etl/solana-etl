@@ -10,6 +10,7 @@ SERVICE_EXEC_START="${SERVICE_WORKING_DIRECTORY}/main myFirstConsumer"
 SERVICE_ENVIRONMENT="GOOGLE_APPLICATION_CREDENTIALS=${SERVICE_WORKING_DIRECTORY}/solana-bq.json"
 BINARY_URL="https://github.com/BCWResearch/solana-etl/releases/download/inserter.${VERSION}/blockchain_etl_inserter"
 ENV_FILE_PATH="${SERVICE_WORKING_DIRECTORY}/.env"
+PROJECT_ID="your_project_id" 
 
 # Check if the script is being run as root
 if [ "$EUID" -ne 0 ]; then
@@ -38,7 +39,7 @@ chmod +x ${SERVICE_WORKING_DIRECTORY}/main
 # Create the .env file
 cat <<EOF > $ENV_FILE_PATH
 QUEUE_NAME="solana-etl"
-BQ_PROJECT_ID="<your project ID>"
+BQ_PROJECT_ID="$PROJECT_ID"
 BQ_DATASET_ID="crypto_solana_mainnet_us"
 RABBITMQ_USER="jb"
 RABBITMQ_PASS="jb"
