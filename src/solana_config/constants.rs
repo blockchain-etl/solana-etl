@@ -26,3 +26,9 @@ pub const OLD_BLOCK_SLOT_ERROR_CODE: i32 = -32001;
 
 /// Error code returned when calling for a block that has yet to be confirmed
 pub const UNCONFIRMED_BLOCK_SLOT_ERROR_CODE: i32 = -32004;
+
+pub const INTERNAL_ERROR_CODE: i32 = -32603;
+
+pub const NO_TX_HISTORY: i32 = -32011;
+
+pub const NO_STATUS: i32 = -32014;
