@@ -4,9 +4,10 @@ NOTE: You may be looking for the previous iteration of `solana-etl`, written in 
 
 This repository contains all of the code for running a Solana ETL pipeline. The primary purpose of this is to serve data for Google BigQuery, but outputs for Google Pub/Sub, RabbitMQ, RabbitMQ Stream, JSON files, and JSONL files are supported.
 
-To deploy your own instance of this pipeline, you can find full end-to-end deployment scripts and documentation [here](/iac/).
-
 If you would like to modify this code for your own purposes, see the [documentation](/docs/).
+
+## Quickstart
+To deploy your own instance of this pipeline, you can find full end-to-end deployment scripts and documentation [here](/iac/).
 
 ## Architecture Overview
 The overall infrastructure is depicted below.
