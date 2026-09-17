@@ -10,7 +10,7 @@ pub struct BlockResponse {
     jsonrpc: String,
     pub error: Option<ResponseError>,
     pub result: Option<UiConfirmedBlock>,
-    id: i32,
+    id: Option<i32>,
 }
 
 /// this is used for parsing the json response from calling the rpc node's [getBlocks()](https://docs.solana.com/api/http#getblock) function.

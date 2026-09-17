@@ -16,7 +16,7 @@ use solana_transaction_status::option_serializer::OptionSerializer;
 use solana_transaction_status::UiParsedInstruction;
 
 use crate::solana_config::proto_codegen::transaction_by_addr::{self as tx_by_addr};
-use solana_sdk::message::MessageHeader;
+use solana_message::MessageHeader;
 use solana_transaction_status::parse_accounts::ParsedAccount;
 use solana_transaction_status::{
     parse_accounts::ParsedAccountSource, EncodedTransaction, EncodedTransactionWithStatusMeta,
@@ -88,6 +88,7 @@ impl From<Reward> for generated_reward {
                 Some(RewardType::Rent) => generated_reward_type::Rent,
                 Some(RewardType::Staking) => generated_reward_type::Staking,
                 Some(RewardType::Voting) => generated_reward_type::Voting,
+                Some(RewardType::DeactivatedStake) => generated_reward_type::DeactivatedStake,
             } as i32,
             commission: item.commission.map(|c| c.to_string()).unwrap_or_default(),
         }

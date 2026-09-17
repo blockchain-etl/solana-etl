@@ -96,7 +96,9 @@ pub async fn get_recent_block(
                         // Solana's official documentation does not provide information on these error codes,
                         // but quicknode does: https://support.quicknode.com/hc/en-us/articles/16459608696721-Solana-RPC-Error-Code-Reference
                         match err.code {
-                            constants::LEDGER_JUMP_ERROR_CODE | constants::INTERNAL_ERROR_CODE => {
+                            constants::LEDGER_JUMP_ERROR_CODE
+                            | constants::INTERNAL_ERROR_CODE
+                            | constants::OLD_BLOCK_SLOT_ERROR_CODE => {
                                 // The data source does not provide this block (and it never will).
                                 // Switches to the fallback endpoint.
                                 warn!("Data source does not provide block at slot: {}", slot);
@@ -124,13 +126,13 @@ pub async fn get_recent_block(
                                 warn!("Slot {:?} does not contain a block (skipped slot)", slot);
                                 return None;
                             }
-                            constants::OLD_BLOCK_SLOT_ERROR_CODE => {
-                                // Too far behind the tip of the chain
-                                warn!(
-                                    "The data source does not provide data for blocks this old: {}", slot
-                                );
-continue;
-                            }
+                            /*constants::OLD_BLOCK_SLOT_ERROR_CODE => {
+                                                            // Too far behind the tip of the chain
+                                                            warn!(
+                                                                "The data source does not provide data for blocks this old: {}", slot
+                                                            );
+                            continue;
+                                                        }*/
                             constants::UNCONFIRMED_BLOCK_SLOT_ERROR_CODE | constants::NO_STATUS => {
                                 // The slot currently doesn't have a block, but it might in the future.
                                 warn!(

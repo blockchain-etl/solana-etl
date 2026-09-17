@@ -32,3 +32,5 @@ pub const INTERNAL_ERROR_CODE: i32 = -32603;
 pub const NO_TX_HISTORY: i32 = -32011;
 
 pub const NO_STATUS: i32 = -32014;
+
+pub const RATE_LIMITED: i32 = -32005;

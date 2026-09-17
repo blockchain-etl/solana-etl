@@ -7,8 +7,24 @@ use super::{
     types::account_response_types::{AccountDataEnumResponse, AccountInfoInfoEnumResponse},
 };
 use crate::solana_config::constants;
-use mpl_token_metadata::accounts::Metadata;
+use borsh::BorshDeserialize;
+//use solana_sdk::borsh0_10::try_from_slice_unchecked;
+use solana_pubkey::Pubkey;
 use std::str::FromStr;
+
+#[derive(Clone, BorshDeserialize, Debug, PartialEq)]
+pub struct Metadata {
+    key: mpl_token_metadata::types::Key,
+    pub update_authority: Pubkey,
+    pub mint: Pubkey,
+    pub name: String,
+    pub symbol: String,
+    pub uri: String,
+    pub seller_fee_basis_points: u16,
+    pub creators: Option<Vec<mpl_token_metadata::types::Creator>>,
+    pub primary_sale_happened: bool,
+    pub is_mutable: bool,
+}
 
 /// Used to facilitate token data retrieval from the RPC Node, the struct contains
 /// mint data for tokens and whether it is a NFT
@@ -39,21 +55,19 @@ pub fn get_tokens_from_mint_accounts(
                     let token_amount_decimals = s.decimals;
                     if token_amount_decimals.is_some() {
                         // TODO: when Rust stabilizes the LazyCell feature, we can initialize this once at startup.
-                        let metadata_program_id = solana_sdk::pubkey::Pubkey::from_str(
-                            constants::METADATA_PROGRAM_ID_STR,
-                        )
-                        .expect("METADATA_PROGRAM_ID is parseable into a key");
-                        let mint_key = solana_sdk::pubkey::Pubkey::from_str(&pubkey)
+                        let metadata_program_id =
+                            Pubkey::from_str(constants::METADATA_PROGRAM_ID_STR)
+                                .expect("METADATA_PROGRAM_ID is parseable into a key");
+                        let mint_key = Pubkey::from_str(&pubkey)
                             .expect("account pubkey is parseable into a key");
-                        let (metadata_account, _) =
-                            solana_sdk::pubkey::Pubkey::find_program_address(
-                                &[
-                                    constants::METADATA_BYTES,
-                                    &metadata_program_id.to_bytes(),
-                                    &mint_key.to_bytes(),
-                                ],
-                                &metadata_program_id,
-                            );
+                        let (metadata_account, _) = Pubkey::find_program_address(
+                            &[
+                                constants::METADATA_BYTES,
+                                &metadata_program_id.to_bytes(),
+                                &mint_key.to_bytes(),
+                            ],
+                            &metadata_program_id,
+                        );
                         let is_nft = token_amount_decimals.map(|decimals| decimals == 0).unwrap();
                         packed_token_data.push(PackedTokenData {
                             mint: metadata_account.to_string(),
@@ -80,8 +94,9 @@ pub fn unpack_token_account(
             let [encoded_data, _encoding] = string_slice;
             let base64_decoded_data =
                 base64::Engine::decode(&base64::prelude::BASE64_STANDARD, encoded_data).unwrap();
-            let metadata = Metadata::from_bytes(&base64_decoded_data).unwrap();
-
+            //let metadata = Metadata::try_from_slice(&base64_decoded_data).unwrap();
+            let mut data = base64_decoded_data.as_slice();
+            let metadata = Metadata::deserialize(&mut data).unwrap();
             solana_account_protobuf::Token {
                 retrieval_timestamp: Some(UnixTimestamp {
                     timestamp: token_retrieval_timestamp as i64,

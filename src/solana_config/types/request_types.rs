@@ -84,7 +84,7 @@ impl BlockRequest {
             transactionDetails: String::from("full"),
             rewards: true,
             commitment: String::from("finalized"),
-            maxSupportedTransactionVersion: 0,
+            maxSupportedTransactionVersion: 1,
         };
 
         Self {
